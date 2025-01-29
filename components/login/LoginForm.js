@@ -6,11 +6,18 @@ import CustomPasswordInput from "@/components/shared/CustomPasswordInput";
 import { validateEmail } from "@/helpers/utils";
 import CustomSecondaryButton from "@/components/shared/CustomSecondaryButton";
 import Link from "next/link";
+import { loginUserFetch } from "@/services/users";
+import { useCookies } from "next-client-cookies";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
   const [emailText, setEmailText] = useState("");
   const [emailErrorText, setEmailErrorText] = useState("");
   const [passwordText, setPasswordText] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const cookies = useCookies();
+  const router = useRouter();
 
   const handleEmailTextChange = (e) => {
     setEmailText(e.target.value);
@@ -21,11 +28,33 @@ export default function LoginForm() {
     setPasswordText(e.target.value);
   };
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
+    setErrorMessage("");
     if (!validateEmail(emailText)) {
       setEmailErrorText("Please, enter a valid email address!");
       return;
+    }
+
+    try {
+      const signUpData = {
+        email: emailText,
+        password: passwordText,
+      };
+
+      const response = await loginUserFetch({ data: signUpData });
+
+      const jsonResponse = await response.json();
+      const { success, message, token, userId } = jsonResponse || {};
+      if (!success) {
+        setErrorMessage(message);
+      } else {
+        cookies.set("token", token, { expires: 30 });
+        router.push(`/profile/${userId}`);
+      }
+    } catch (error) {
+      console.log("Error trying to sign up: ", error);
+      setErrorMessage("Error trying to sign up. Please, try again!");
     }
   };
 
@@ -50,14 +79,14 @@ export default function LoginForm() {
             placeholder={"Password"}
             isRequired
           />
+          {errorMessage && (
+            <p className="text-red-500 text-sm text-center">{errorMessage}</p>
+          )}
           <CustomPrimaryButton text="Login" type="submit" />
         </div>
       </form>
       <Link href="/sign-up">
-        <CustomSecondaryButton
-          text="Sign Up"
-          type="button"
-        />
+        <CustomSecondaryButton text="Sign Up" type="button" />
       </Link>
     </div>
   );
