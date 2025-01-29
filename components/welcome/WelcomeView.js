@@ -16,10 +16,10 @@ export default function WelcomeView() {
             </div>
             <div className="flex flex-col justify-center w-1/2 gap-3">
               <Link href="/login">
-                <CustomPrimaryButton text="Login" handleClick={() => {}} />
+                <CustomPrimaryButton text="Login" type="button" handleClick={() => {}} />
               </Link>
               <Link href="/sign-up">
-                <CustomSecondaryButton text="Sign Up" handleClick={() => {}} />
+                <CustomSecondaryButton text="Sign Up" type="button" handleClick={() => {}} />
               </Link>
             </div>
           </div>
