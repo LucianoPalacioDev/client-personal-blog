@@ -8,7 +8,7 @@ export default function CustomTextInput({
   errorMessage,
 }) {
   return (
-    <div>
+    <div className="w-full">
       {!!labelText && (
         <label
           htmlFor={labelId}

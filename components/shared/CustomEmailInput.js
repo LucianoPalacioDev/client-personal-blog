@@ -8,7 +8,7 @@ export default function CustomEmailInput({
   errorMessage,
 }) {
   return (
-    <div>
+    <div className="w-full">
       {!!labelText && (
         <label
           htmlFor={labelId}
