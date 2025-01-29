@@ -8,19 +8,21 @@ import CustomSecondaryButton from "@/components/shared/CustomSecondaryButton";
 import { validateEmail, validatePassword } from "@/helpers/utils";
 import Link from "next/link";
 import { registerUserFetch } from "@/services/users";
+import { useCookies } from "next-client-cookies";
+import { useRouter } from "next/navigation";
 
 export default function SignUpForm() {
   const [usernameText, setUsernameText] = useState("");
   const [usernameErrorText, setUsernameErrorText] = useState("");
-
   const [emailText, setEmailText] = useState("");
   const [emailErrorText, setEmailErrorText] = useState("");
-
   const [passwordText, setPasswordText] = useState("");
   const [confirmPasswordText, setConfirmPasswordText] = useState("");
   const [passwordErrorText, setPasswordErrorText] = useState("");
-
   const [errorMessage, setErrorMessage] = useState("");
+
+  const cookies = useCookies();
+  const router = useRouter();
 
   const handleUsernameTextChange = (e) => {
     setUsernameText(e.target.value);
@@ -68,12 +70,12 @@ export default function SignUpForm() {
       const response = await registerUserFetch({ data: signUpData });
 
       const jsonResponse = await response.json();
-      const { success, message } = jsonResponse || {};
+      const { success, message, token, userId } = jsonResponse || {};
       if (!success) {
         setErrorMessage(message);
       } else {
-        // TODO: login
-        // TODO: redirect to home
+        cookies.set("token", token, { expires: 30 });
+        router.push(`/profile/${userId}`);
       }
     } catch (error) {
       console.log("Error trying to sign up: ", error);
