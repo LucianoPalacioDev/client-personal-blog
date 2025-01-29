@@ -1,11 +1,30 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomSearchInput from "@/components/shared/CustomSearchInput";
 import PostsList from "@/components/profile/PostsList";
 import CustomPrimaryButton from "@/components/shared/CustomPrimaryButton";
+import { getAllPostsFetch } from "@/services/posts";
 
 export default function PostSection({ handleOpenBlogModal }) {
   const [searchText, setSearchText] = useState("");
+  const [currentPosts, setCurrentPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchPostsData = async () => {
+      try {
+        const response = await getAllPostsFetch();
+        const jsonResponse = await response.json();
+        const { success, posts } = jsonResponse || {};
+        if (success) {
+          setCurrentPosts(posts);
+        }
+      } catch (error) {
+        console.log("Error trying to get the posts data: ", error);
+      }
+    };
+
+    fetchPostsData();
+  }, []);
 
   const handleSearchTextChange = (event) => {
     setSearchText(event.target.value);
@@ -30,7 +49,7 @@ export default function PostSection({ handleOpenBlogModal }) {
             />
           </div>
         </div>
-        <PostsList />
+        <PostsList posts={currentPosts} />
       </div>
     </div>
   );
