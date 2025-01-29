@@ -5,6 +5,7 @@ export default function CustomTextInput({
   labelId,
   placeholder,
   isRequired = false,
+  errorMessage,
 }) {
   return (
     <div>
@@ -23,6 +24,9 @@ export default function CustomTextInput({
         value={value}
         onChange={handleChange}
       />
+      {errorMessage && (
+        <p className="text-red-500 text-sm mt-1">{errorMessage}</p>
+      )}
     </div>
   );
 }

@@ -5,10 +5,14 @@ export default function CustomPasswordInput({
   labelId,
   placeholder,
   isRequired = false,
+  errorMessage,
 }) {
   return (
     <div>
-      <label htmlFor={labelId} className="block mb-2 text-sm font-medium text-gray-900">
+      <label
+        htmlFor={labelId}
+        className="block mb-2 text-sm font-medium text-gray-900"
+      >
         {labelText}
       </label>
       <input
@@ -20,6 +24,9 @@ export default function CustomPasswordInput({
         value={value}
         onChange={handleChange}
       />
+      {errorMessage && (
+        <p className="text-red-500 text-sm mt-1">{errorMessage}</p>
+      )}
     </div>
   );
 }
