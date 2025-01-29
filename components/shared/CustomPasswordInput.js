@@ -9,12 +9,14 @@ export default function CustomPasswordInput({
 }) {
   return (
     <div>
-      <label
-        htmlFor={labelId}
-        className="block mb-2 text-sm font-medium text-gray-900"
-      >
-        {labelText}
-      </label>
+      {!!labelText && (
+        <label
+          htmlFor={labelId}
+          className="block mb-2 text-sm font-medium text-gray-900"
+        >
+          {labelText}
+        </label>
+      )}
       <input
         type="password"
         id={labelId}
