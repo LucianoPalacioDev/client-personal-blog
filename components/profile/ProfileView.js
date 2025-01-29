@@ -8,7 +8,7 @@ import CustomDangerButton from "@/components/shared/CustomDangerButton";
 import { useCookies } from "next-client-cookies";
 import { useRouter } from "next/navigation";
 import LogoutModal from "@/components/profile/modals/LogoutModal";
-import BlogModal from "@/components/profile/modals/BlogModal";
+import BlogModal from "@/components/profile/modals/PostModal";
 
 const PROFILE_DATA_TEST = {
   username: "Luciano Developer",
@@ -82,7 +82,7 @@ export default function ProfileView() {
             />
             <div className="w-1/6 flex items-center">
               <CustomPrimaryButton
-                text="Add New Blog"
+                text="Add New Post"
                 type="button"
                 handleClick={handleOpenBlogModal}
               />

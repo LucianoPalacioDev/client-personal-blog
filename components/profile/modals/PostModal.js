@@ -56,11 +56,11 @@ export default function BlogModal({
         console.log("Post creado!")
       }
     } catch (error) {
-      console.log(`Error trying to ${isBlogEditing ? "edit" : "create"} the blog.`, error);
+      console.log(`Error trying to ${isBlogEditing ? "edit" : "create"} the post.`, error);
       setErrorMessage(
         `Error trying to ${
           isBlogEditing ? "edit" : "create"
-        } the blog. Please, try again!`
+        } the post. Please, try again!`
       );
     }
 
@@ -70,7 +70,7 @@ export default function BlogModal({
     <CustomModal isOpen={isOpen} onClose={onClose}>
       <div className="w-full h-full p-5 flex flex-col justify-between items-center gap-5">
         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
-          {`${isBlogEditing ? "Edit" : "Create New"} Blog`}
+          {`${isBlogEditing ? "Edit" : "Create New"} Post`}
         </h5>
         <form className="w-full flex flex-col gap-5" onSubmit={handleSubmit}>
           <div className="w-full flex flex-col gap-5">
