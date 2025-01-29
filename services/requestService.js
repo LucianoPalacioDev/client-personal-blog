@@ -1,4 +1,9 @@
+import Cookies from "js-cookie";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const token = Cookies.get("token") || "";
+
+const getToken = () => token;
 
 const getApi = (url) => {
   return fetch(`${API_URL}${url}`, {
@@ -34,6 +39,7 @@ const deleteApi = (url, content) => {
 const getHeaders = () => {
   return {
     "Content-Type": "application/json",
+    auth: getToken(),
   };
 };
 
