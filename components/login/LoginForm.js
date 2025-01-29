@@ -1,10 +1,11 @@
 "use client";
 import { useState } from "react";
 import CustomPrimaryButton from "@/components/shared/CustomPrimaryButton";
-import CustomTextInput from "@/components/shared/CustomTextInput";
 import CustomEmailInput from "@/components/shared/CustomEmailInput";
 import CustomPasswordInput from "@/components/shared/CustomPasswordInput";
 import { validateEmail } from "@/helpers/utils";
+import CustomSecondaryButton from "@/components/shared/CustomSecondaryButton";
+import Link from "next/link";
 
 export default function LoginForm() {
   const [emailText, setEmailText] = useState("");
@@ -13,7 +14,7 @@ export default function LoginForm() {
 
   const handleEmailTextChange = (e) => {
     setEmailText(e.target.value);
-    setEmailErrorText('');
+    setEmailErrorText("");
   };
 
   const handlePasswordTextChange = (e) => {
@@ -23,7 +24,7 @@ export default function LoginForm() {
   const handleLogin = (event) => {
     event.preventDefault();
     if (!validateEmail(emailText)) {
-      setEmailErrorText('Please, enter a valid email address!');
+      setEmailErrorText("Please, enter a valid email address!");
       return;
     }
   };
@@ -52,6 +53,12 @@ export default function LoginForm() {
           <CustomPrimaryButton text="Login" type="submit" />
         </div>
       </form>
+      <Link href="/sign-up">
+        <CustomSecondaryButton
+          text="Sign Up"
+          type="button"
+        />
+      </Link>
     </div>
   );
 }
