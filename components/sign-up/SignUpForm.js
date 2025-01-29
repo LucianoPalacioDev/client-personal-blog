@@ -2,11 +2,12 @@
 import { useState } from "react";
 import CustomPrimaryButton from "@/components/shared/CustomPrimaryButton";
 import CustomEmailInput from "@/components/shared/CustomEmailInput";
-import CustomTextInput from '@/components/shared/CustomTextInput'
+import CustomTextInput from "@/components/shared/CustomTextInput";
 import CustomPasswordInput from "@/components/shared/CustomPasswordInput";
 import CustomSecondaryButton from "@/components/shared/CustomSecondaryButton";
 import { validateEmail, validatePassword } from "@/helpers/utils";
 import Link from "next/link";
+import { registerUserFetch } from "@/services/users";
 
 export default function SignUpForm() {
   const [usernameText, setUsernameText] = useState("");
@@ -18,6 +19,8 @@ export default function SignUpForm() {
   const [passwordText, setPasswordText] = useState("");
   const [confirmPasswordText, setConfirmPasswordText] = useState("");
   const [passwordErrorText, setPasswordErrorText] = useState("");
+
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleUsernameTextChange = (e) => {
     setUsernameText(e.target.value);
@@ -39,8 +42,9 @@ export default function SignUpForm() {
     setPasswordErrorText("");
   };
 
-  const handleSignUp = (event) => {
+  const handleSignUp = async (event) => {
     event.preventDefault();
+    setErrorMessage("");
     if (passwordText !== confirmPasswordText) {
       setPasswordErrorText("Passwords do not match!");
       return;
@@ -53,13 +57,35 @@ export default function SignUpForm() {
       setEmailErrorText("Please, enter a valid email address!");
       return;
     }
+
+    try {
+      const signUpData = {
+        username: usernameText,
+        email: emailText,
+        password: passwordText,
+      };
+
+      const response = await registerUserFetch({ data: signUpData });
+
+      const jsonResponse = await response.json();
+      const { success, message } = jsonResponse || {};
+      if (!success) {
+        setErrorMessage(message);
+      } else {
+        // TODO: login
+        // TODO: redirect to home
+      }
+    } catch (error) {
+      console.log("Error trying to sign up: ", error);
+      setErrorMessage("Error trying to sign up. Please, try again!");
+    }
   };
 
   return (
     <div className="flex flex-col justify-center w-1/2 gap-3">
       <form onSubmit={handleSignUp}>
         <div className="flex flex-col gap-5">
-        <CustomTextInput
+          <CustomTextInput
             value={usernameText}
             handleChange={handleUsernameTextChange}
             labelText={"Username"}
@@ -95,14 +121,14 @@ export default function SignUpForm() {
             isRequired
             errorMessage={passwordErrorText}
           />
+          {errorMessage && (
+            <p className="text-red-500 text-sm text-center">{errorMessage}</p>
+          )}
           <CustomPrimaryButton text="Sign Up" type="submit" />
         </div>
       </form>
       <Link href="/login">
-        <CustomSecondaryButton
-          text="Login"
-          type="button"
-        />
+        <CustomSecondaryButton text="Login" type="button" />
       </Link>
     </div>
   );
