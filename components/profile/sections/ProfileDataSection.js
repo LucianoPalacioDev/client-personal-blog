@@ -4,14 +4,14 @@ import CustomTitle from "@/components/shared/CustomTitle";
 import CustomDangerButton from "@/components/shared/CustomDangerButton";
 import { getUserDataByIdFetch } from "@/services/users";
 
-export default function ProfileDataSection({ handleOpenLogoutModal, userId }) {
+export default function ProfileDataSection({ handleOpenLogoutModal }) {
   const [profileUsername, setProfileUsername] = useState("");
   const [profileEmail, setProfileEmail] = useState("");
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await getUserDataByIdFetch({ id: userId });
+        const response = await getUserDataByIdFetch();
         const jsonResponse = await response.json();
         const { success, user } = jsonResponse || {};
         if (success) {
@@ -30,7 +30,7 @@ export default function ProfileDataSection({ handleOpenLogoutModal, userId }) {
     };
 
     fetchUserData();
-  }, [userId]);
+  }, []);
 
   return (
     <div className="w-1/3 bg-blue-300 h-full flex justify-center items-center rounded-xl">

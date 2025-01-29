@@ -39,7 +39,6 @@ export default function ProfileView({ userId }) {
     <div className="w-full h-full flex">
       <ProfileDataSection
         handleOpenLogoutModal={handleOpenLogoutModal}
-        userId={userId}
       />
       <PostSection handleOpenBlogModal={handleOpenBlogModal} />
       <LogoutModal
