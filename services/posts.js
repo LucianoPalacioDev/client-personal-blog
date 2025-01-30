@@ -11,7 +11,7 @@ export const createPostFetch = ({data}) => {
 };
 
 export const updatePostFetch = ({id, data}) => {
-  return RequestService.put(`${PREFIX}/update/${id}`, JSON.stringify(data));
+  return RequestService.post(`${PREFIX}/update/${id}`, JSON.stringify(data));
 };
 
 export const deletePostFetch = ({id}) => {

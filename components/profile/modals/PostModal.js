@@ -1,19 +1,20 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomModal from "@/components/shared/CustomModal";
 import CustomPrimaryButton from "@/components/shared/CustomPrimaryButton";
 import CustomSecondaryButton from "@/components/shared/CustomSecondaryButton";
 import CustomTextInput from "@/components/shared/CustomTextInput";
 import CustomTextAreaInput from "@/components/shared/CustomTextAreaInput";
-import { createPostFetch } from "@/services/posts";
+import { createPostFetch, updatePostFetch } from "@/services/posts";
 import LoadingIcon from "@/components/shared/icons/LoadingIcon";
+import { isEmptyObj } from "@/helpers/utils";
 
 export default function PostModal({
   isOpen,
   onClose,
-  isBlogEditing,
   setAlertSuccessText,
   setAreNewPosts,
+  selectedPost,
 }) {
   const [titleText, setTitleText] = useState("");
   const [titleErrorText, setTitleErrorText] = useState("");
@@ -21,6 +22,15 @@ export default function PostModal({
   const [contentErrorText, setContentErrorText] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isFetching, setIsFetching] = useState(false);
+
+  const isBlogEditing = !isEmptyObj(selectedPost);
+
+  useEffect(() => {
+    if (isBlogEditing) {
+      setTitleText(selectedPost?.title);
+      setContentText(selectedPost?.content);
+    }
+  }, [isBlogEditing, selectedPost]);
 
   const resetValues = () => {
     setTitleText("");
@@ -59,7 +69,9 @@ export default function PostModal({
         content: contentText,
       };
 
-      const response = await createPostFetch({ data: postData });
+      const response = isBlogEditing
+        ? await updatePostFetch({ id: selectedPost?.id, data: postData })
+        : await createPostFetch({ data: postData });
 
       const jsonResponse = await response.json();
       const { success, message } = jsonResponse || {};

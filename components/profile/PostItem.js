@@ -4,7 +4,7 @@ import ThreeDotsIcon from "@/components/shared/icons/ThreeDotsIcon";
 import PostOptionsMenu from "@/components/profile/menus/PostOptionsMenu";
 import PostDeletionModal from '@/components/profile/modals/PostDeletionModal';
 
-export default function PostItem({ post, isPostsOwner, handleDeletePost }) {
+export default function PostItem({ post, isPostsOwner, handleDeletePost, handleEditPost }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDeletionPostModalOpen, setIsDeletionPostModalOpen] = useState(false);
 
@@ -39,13 +39,14 @@ export default function PostItem({ post, isPostsOwner, handleDeletePost }) {
     };
   }, []);
 
-  const handleEditPost = () => {
-    console.log("Edit post");
-  };
-
   const handleDeletePostAndCloseMenu = async () => {
     await handleDeletePost({ id: post?.id });
     handleCloseDeletionPostModal();
+  };
+
+  const handleEditPostAndCloseMenu = async () => {
+    await handleEditPost({ post });
+    handleCloseMenu();
   };
 
   return (
@@ -65,7 +66,7 @@ export default function PostItem({ post, isPostsOwner, handleDeletePost }) {
             {isMenuOpen && (
               <PostOptionsMenu
                 menuRef={menuRef}
-                handleEditPost={handleEditPost}
+                handleEditPost={handleEditPostAndCloseMenu}
                 handleDeletePost={handleOpenDeletionPostModal}
               />
             )}

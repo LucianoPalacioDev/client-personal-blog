@@ -6,6 +6,7 @@ export default function PostsList({
   isLoadingPost,
   isPostsOwner,
   handleDeletePost,
+  handleEditPost,
 }) {
   return (
     <div className="w-full h-full overflow-y-auto p-5 border border-gray-200 rounded-lg shadow-sm flex flex-col gap-3">
@@ -27,6 +28,7 @@ export default function PostsList({
               post={post}
               isPostsOwner={isPostsOwner}
               handleDeletePost={handleDeletePost}
+              handleEditPost={handleEditPost}
             />
           );
         })

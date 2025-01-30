@@ -10,9 +10,10 @@ import PostSection from "@/components/profile/sections/PostSection";
 export default function ProfileView({ userId }) {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isBlogModalOpen, setIsBlogModalOpen] = useState(false);
-  const [alertSuccessText, setAlertSuccessText] = useState('');
-  const [alertErrorText, setAlertErrorText] = useState('');
+  const [alertSuccessText, setAlertSuccessText] = useState("");
+  const [alertErrorText, setAlertErrorText] = useState("");
   const [areNewPosts, setAreNewPosts] = useState(true);
+  const [selectedPost, setSelectedPost] = useState(null);
 
   const cookies = useCookies();
   const router = useRouter();
@@ -20,7 +21,7 @@ export default function ProfileView({ userId }) {
   useEffect(() => {
     if (alertSuccessText) {
       setTimeout(() => {
-        setAlertSuccessText('');
+        setAlertSuccessText("");
       }, 2000);
     }
   }, [alertSuccessText]);
@@ -28,7 +29,7 @@ export default function ProfileView({ userId }) {
   useEffect(() => {
     if (alertErrorText) {
       setTimeout(() => {
-        setAlertErrorText('');
+        setAlertErrorText("");
       }, 2000);
     }
   }, [alertErrorText]);
@@ -46,8 +47,9 @@ export default function ProfileView({ userId }) {
     setIsLogoutModalOpen(false);
   };
 
-  const handleOpenBlogModal = () => {
+  const handleOpenBlogModal = ({ post }) => {
     setIsBlogModalOpen(true);
+    setSelectedPost(post);
   };
 
   const handleCloseBlogModal = () => {
@@ -78,7 +80,7 @@ export default function ProfileView({ userId }) {
       <PostModal
         isOpen={isBlogModalOpen}
         onClose={handleCloseBlogModal}
-        isBlogEditing={false}
+        selectedPost={selectedPost}
         setAlertSuccessText={setAlertSuccessText}
         setAreNewPosts={setAreNewPosts}
       />

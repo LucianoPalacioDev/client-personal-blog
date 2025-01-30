@@ -66,6 +66,10 @@ export default function PostSection({
     }
   };
 
+  const handleEditPost = async ({ post }) => {
+    handleOpenBlogModal({ post });
+  };
+
   return (
     <div className="w-2/3 h-full flex flex-col justify-center items-center">
       <div className="w-10/12 h-full pt-20 flex flex-col gap-10">
@@ -82,7 +86,7 @@ export default function PostSection({
               <CustomPrimaryButton
                 text="Add New Post"
                 type="button"
-                handleClick={handleOpenBlogModal}
+                handleClick={() => handleOpenBlogModal({ post: null })}
               />
             </div>
           )}
@@ -95,6 +99,7 @@ export default function PostSection({
           isPostsOwner={isPostsOwner}
           setAlertSuccessText={setAlertSuccessText}
           handleDeletePost={handleDeletePost}
+          handleEditPost={handleEditPost}
         />
       </div>
     </div>
