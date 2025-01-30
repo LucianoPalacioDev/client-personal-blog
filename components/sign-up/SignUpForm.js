@@ -10,6 +10,7 @@ import Link from "next/link";
 import { registerUserFetch } from "@/services/users";
 import { useCookies } from "next-client-cookies";
 import { useRouter } from "next/navigation";
+import LoadingIcon from "@/components/shared/icons/LoadingIcon";
 
 export default function SignUpForm() {
   const [usernameText, setUsernameText] = useState("");
@@ -20,6 +21,7 @@ export default function SignUpForm() {
   const [confirmPasswordText, setConfirmPasswordText] = useState("");
   const [passwordErrorText, setPasswordErrorText] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [isFetching, setIsFetching] = useState(false);
 
   const cookies = useCookies();
   const router = useRouter();
@@ -61,6 +63,7 @@ export default function SignUpForm() {
     }
 
     try {
+      setIsFetching(true);
       const signUpData = {
         username: usernameText,
         email: emailText,
@@ -77,9 +80,11 @@ export default function SignUpForm() {
         cookies.set("token", token, { expires: 30 });
         router.push(`/profile/${userId}`);
       }
+      setIsFetching(false);
     } catch (error) {
       console.log("Error trying to sign up: ", error);
       setErrorMessage("Error trying to sign up. Please, try again!");
+      setIsFetching(false);
     }
   };
 
@@ -126,7 +131,18 @@ export default function SignUpForm() {
           {errorMessage && (
             <p className="text-red-500 text-sm text-center">{errorMessage}</p>
           )}
-          <CustomPrimaryButton text="Sign Up" type="submit" />
+          <CustomPrimaryButton
+            text={
+              isFetching ? (
+                <div className="w-full flex justify-center items-center">
+                  <LoadingIcon size="1rem" />
+                </div>
+              ) : (
+                "Sign Up"
+              )
+            }
+            type="submit"
+          />
         </div>
       </form>
       <Link href="/login">

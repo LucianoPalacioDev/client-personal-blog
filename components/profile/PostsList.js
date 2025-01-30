@@ -6,7 +6,7 @@ export default function PostsList({ posts, isLoadingPost }) {
     <div className="w-full h-full overflow-y-auto p-5 border border-gray-200 rounded-lg shadow-sm flex flex-col gap-3">
       {isLoadingPost ? (
         <div className="w-full h-full flex justify-center items-center">
-          <LoadingIcon />
+          <LoadingIcon size='3rem'/>
         </div>
       ) : (posts || []).length <= 0 ? (
         <div className="w-full h-full flex justify-center items-center">

@@ -6,6 +6,7 @@ import CustomSecondaryButton from "@/components/shared/CustomSecondaryButton";
 import CustomTextInput from "@/components/shared/CustomTextInput";
 import CustomTextAreaInput from "@/components/shared/CustomTextAreaInput";
 import { createPostFetch } from "@/services/posts";
+import LoadingIcon from "@/components/shared/icons/LoadingIcon";
 
 export default function PostModal({
   isOpen,
@@ -19,6 +20,7 @@ export default function PostModal({
   const [contentText, setContentText] = useState("");
   const [contentErrorText, setContentErrorText] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [isFetching, setIsFetching] = useState(false);
 
   const resetValues = () => {
     setTitleText("");
@@ -51,6 +53,7 @@ export default function PostModal({
     }
 
     try {
+      setIsFetching(true);
       const postData = {
         title: titleText,
         content: contentText,
@@ -70,6 +73,7 @@ export default function PostModal({
         resetValues();
         onClose();
       }
+      setIsFetching(false);
     } catch (error) {
       console.log(
         `Error trying to ${isBlogEditing ? "edit" : "create"} the post.`,
@@ -80,6 +84,7 @@ export default function PostModal({
           isBlogEditing ? "edit" : "create"
         } the post. Please, try again!`
       );
+      setIsFetching(false);
     }
   };
 
@@ -126,7 +131,17 @@ export default function PostModal({
                 handleClick={handleCloseModal}
               />
               <CustomPrimaryButton
-                text={isBlogEditing ? "Edit" : "Create"}
+                text={
+                  isFetching ? (
+                    <div className="w-full flex justify-center items-center">
+                      <LoadingIcon size="1rem" />
+                    </div>
+                  ) : isBlogEditing ? (
+                    "Edit"
+                  ) : (
+                    "Create"
+                  )
+                }
                 type="submit"
               />
             </div>
