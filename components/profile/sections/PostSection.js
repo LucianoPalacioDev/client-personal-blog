@@ -7,6 +7,7 @@ import { getAllPostByUserFilteredFetch } from "@/services/posts";
 import { deletePostFetch } from "@/services/posts";
 import CustomAlertSuccess from "@/components/shared/CustomAlertSuccess";
 import CustomAlertDanger from "@/components/shared/CustomAlertDanger";
+import CustomTitle from "@/components/shared/CustomTitle";
 
 const debounce = (fn, delay) => {
   let timeoutID = null;
@@ -91,36 +92,39 @@ export default function PostSection({
   };
 
   return (
-    <div className="w-2/3 h-full flex flex-col justify-center items-center">
-      <div className="w-10/12 h-full pt-20 flex flex-col gap-10">
-        <div className="w-full flex justify-between items-center gap-5">
-          <CustomSearchInput
-            value={searchText}
-            handleChange={handleSearchTextChange}
-            placeholder={"Search posts"}
-            isRequired={false}
-            errorMessage={""}
+    <div className="w-full sm:w-2/3 h-full flex flex-col justify-center items-center">
+      <div className="w-10/12 h-full pt-20 flex flex-col gap-3">
+        <h5 className="text-3xl font-bold text-left ">Posts</h5>
+        <div className="w-full h-full flex flex-col gap-10">
+          <div className="w-full flex flex-col sm:flex-row sm:justify-between sm:items-center gap-5">
+            <CustomSearchInput
+              value={searchText}
+              handleChange={handleSearchTextChange}
+              placeholder={"Search posts"}
+              isRequired={false}
+              errorMessage={""}
+            />
+            {isPostsOwner && (
+              <div className="w-full sm:w-1/6 flex items-center">
+                <CustomPrimaryButton
+                  text="Add New Post"
+                  type="button"
+                  handleClick={() => handleOpenBlogModal({ post: null })}
+                />
+              </div>
+            )}
+          </div>
+          {!!alertSuccessText && <CustomAlertSuccess text={alertSuccessText} />}
+          {!!alertErrorText && <CustomAlertDanger text={alertErrorText} />}
+          <PostsList
+            posts={currentPosts}
+            isLoadingPost={isLoadingPost}
+            isPostsOwner={isPostsOwner}
+            setAlertSuccessText={setAlertSuccessText}
+            handleDeletePost={handleDeletePost}
+            handleEditPost={handleEditPost}
           />
-          {isPostsOwner && (
-            <div className="w-1/6 flex items-center">
-              <CustomPrimaryButton
-                text="Add New Post"
-                type="button"
-                handleClick={() => handleOpenBlogModal({ post: null })}
-              />
-            </div>
-          )}
         </div>
-        {!!alertSuccessText && <CustomAlertSuccess text={alertSuccessText} />}
-        {!!alertErrorText && <CustomAlertDanger text={alertErrorText} />}
-        <PostsList
-          posts={currentPosts}
-          isLoadingPost={isLoadingPost}
-          isPostsOwner={isPostsOwner}
-          setAlertSuccessText={setAlertSuccessText}
-          handleDeletePost={handleDeletePost}
-          handleEditPost={handleEditPost}
-        />
       </div>
     </div>
   );

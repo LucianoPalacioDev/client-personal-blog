@@ -56,7 +56,7 @@ export default function ProfileDataSection({ userId }) {
   };
 
   return (
-    <div className="w-1/3 bg-blue-300 h-full flex justify-center items-center rounded-xl">
+    <div className="w-full sm:w-1/3 h-full bg-blue-300 h-full flex justify-center items-center rounded-none sm:rounded-xl">
       <div className="w-full h-full flex flex-col justify-center items-center">
         <div className="w-10/12">
           <CustomTitle text={profileUsername} />

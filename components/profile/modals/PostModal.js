@@ -135,28 +135,26 @@ export default function PostModal({
               <p className="text-red-500 text-sm text-center">{errorMessage}</p>
             )}
           </div>
-          <div className="w-full flex flex-row justify-end">
-            <div className="w-1/2 flex flex-row gap-3">
-              <CustomSecondaryButton
-                text="Close"
-                type="button"
-                handleClick={handleCloseModal}
-              />
-              <CustomPrimaryButton
-                text={
-                  isFetching ? (
-                    <div className="w-full flex justify-center items-center">
-                      <LoadingIcon size="1rem" />
-                    </div>
-                  ) : isBlogEditing ? (
-                    "Edit"
-                  ) : (
-                    "Create"
-                  )
-                }
-                type="submit"
-              />
-            </div>
+          <div className="w-full flex flex-row justify-between gap-10">
+            <CustomSecondaryButton
+              text="Close"
+              type="button"
+              handleClick={handleCloseModal}
+            />
+            <CustomPrimaryButton
+              text={
+                isFetching ? (
+                  <div className="w-full flex justify-center items-center">
+                    <LoadingIcon size="1rem" />
+                  </div>
+                ) : isBlogEditing ? (
+                  "Edit"
+                ) : (
+                  "Create"
+                )
+              }
+              type="submit"
+            />
           </div>
         </form>
       </div>

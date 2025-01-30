@@ -10,11 +10,10 @@ export default function PostDeletionModal({
   return (
     <CustomModal isOpen={isOpen} onClose={onClose}>
       <div className="w-full h-full p-5 flex flex-col justify-between items-center gap-5">
-        <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
+        <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 text-center">
           Are you sure you want to delete the post?
         </h5>
-        <div className="w-full flex flex-row justify-end">
-          <div className="w-1/2 flex flex-row gap-3">
+        <div className="w-full flex flex-row justify-between gap-10">
             <CustomSecondaryButton
               text="Close"
               type="button"
@@ -25,7 +24,6 @@ export default function PostDeletionModal({
               type="button"
               handleClick={handleDeletePostAndCloseMenu}
             />
-          </div>
         </div>
       </div>
     </CustomModal>

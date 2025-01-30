@@ -38,7 +38,7 @@ export default function ProfileView({ userId }) {
   };
 
   return (
-    <div className="w-full h-full flex">
+    <div className="w-full h-full block sm:flex">
       <ProfileDataSection
         userId={userId}
       />
