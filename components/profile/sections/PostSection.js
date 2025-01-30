@@ -10,10 +10,11 @@ export default function PostSection({
   alertSuccessText,
   areNewPosts,
   setAreNewPosts,
-  userId
+  userId,
 }) {
   const [searchText, setSearchText] = useState("");
   const [currentPosts, setCurrentPosts] = useState([]);
+  const [isPostsOwner, setIsPostsOwner] = useState(false);
   const [isLoadingPost, setIsLoadingPost] = useState(true);
 
   useEffect(() => {
@@ -22,10 +23,11 @@ export default function PostSection({
       try {
         const response = await getAllPostsByUserFetch({ id: userId });
         const jsonResponse = await response.json();
-        const { success, posts } = jsonResponse || {};
+        const { success, posts, isOwner } = jsonResponse || {};
         if (success) {
           setCurrentPosts(posts);
           setAreNewPosts(false);
+          setIsPostsOwner(isOwner);
         }
         setIsLoadingPost(false);
       } catch (error) {
@@ -52,20 +54,26 @@ export default function PostSection({
             isRequired={false}
             errorMessage={""}
           />
-          <div className="w-1/6 flex items-center">
-            <CustomPrimaryButton
-              text="Add New Post"
-              type="button"
-              handleClick={handleOpenBlogModal}
-            />
-          </div>
+          {isPostsOwner && (
+            <div className="w-1/6 flex items-center">
+              <CustomPrimaryButton
+                text="Add New Post"
+                type="button"
+                handleClick={handleOpenBlogModal}
+              />
+            </div>
+          )}
         </div>
         {!!alertSuccessText && (
           <div className="p-4 text-sm text-green-800 rounded-lg bg-green-50 flex justify-center">
             <span className="font-medium">{alertSuccessText}</span>
           </div>
         )}
-        <PostsList posts={currentPosts} isLoadingPost={isLoadingPost}/>
+        <PostsList
+          posts={currentPosts}
+          isLoadingPost={isLoadingPost}
+          isPostsOwner={isPostsOwner}
+        />
       </div>
     </div>
   );

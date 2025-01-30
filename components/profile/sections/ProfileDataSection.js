@@ -4,28 +4,34 @@ import CustomTitle from "@/components/shared/CustomTitle";
 import CustomDangerButton from "@/components/shared/CustomDangerButton";
 import { getUserDataByIdFetch } from "@/services/users";
 
-export default function ProfileDataSection({ handleOpenLogoutModal, userId }) {
+export default function ProfileDataSection({
+  handleOpenLogoutModal,
+  userId,
+}) {
   const [profileUsername, setProfileUsername] = useState("Loading...");
   const [profileEmail, setProfileEmail] = useState("Loading...");
+  const [isOwner, setIsOwner] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await getUserDataByIdFetch({ id: userId });
         const jsonResponse = await response.json();
-        const { success, user } = jsonResponse || {};
+        const { success, user, isOwner } = jsonResponse || {};
         if (success) {
           const { username, email } = user || {};
           setProfileUsername(username);
           setProfileEmail(email);
+          setIsOwner(isOwner)
         } else {
-          setProfileUsername('Not Found!')
-          setProfileEmail('Not Found!')
+          setProfileUsername("Not Found!");
+          setProfileEmail("Not Found!");
+          setIsOwner(false)
         }
       } catch (error) {
         console.log("Error trying to get the user data: ", error);
-        setProfileUsername('Not Found!')
-        setProfileEmail('Not Found!')
+        setProfileUsername("Not Found!");
+        setProfileEmail("Not Found!");
       }
     };
 
@@ -38,16 +44,16 @@ export default function ProfileDataSection({ handleOpenLogoutModal, userId }) {
         <div className="w-10/12">
           <CustomTitle text={profileUsername} />
           <hr className="h-px my-8 bg-gray-200 border-0" />
-          <h5 className="text-xl font-bold text-center">
-            {profileEmail}
-          </h5>
-          <div className="mt-8">
-            <CustomDangerButton
-              text="Logout"
-              type="button"
-              handleClick={handleOpenLogoutModal}
-            />
-          </div>
+          <h5 className="text-xl font-bold text-center">{profileEmail}</h5>
+          {isOwner && (
+            <div className="mt-8">
+              <CustomDangerButton
+                text="Logout"
+                type="button"
+                handleClick={handleOpenLogoutModal}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

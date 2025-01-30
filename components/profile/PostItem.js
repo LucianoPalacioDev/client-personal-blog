@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import ThreeDotsIcon from "@/components/shared/icons/ThreeDotsIcon";
 import PostOptionsMenu from "@/components/profile/menus/PostOptionsMenu";
 
-export default function PostItem({ post }) {
+export default function PostItem({ post, isPostsOwner }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef();
 
@@ -42,21 +42,23 @@ export default function PostItem({ post }) {
         <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
           {post.title}
         </h5>
-        <div className="relative">
-          <button
-            onClick={isMenuOpen ? handleCloseMenu : handleOpenMenu}
-            aria-label="post-options"
-          >
-            <ThreeDotsIcon />
-          </button>
-          {isMenuOpen && (
-            <PostOptionsMenu
-              menuRef={menuRef}
-              handleEditPost={handleEditPost}
-              handleDeletePost={handleDeletePost}
-            />
-          )}
-        </div>
+        {isPostsOwner && (
+          <div className="relative">
+            <button
+              onClick={isMenuOpen ? handleCloseMenu : handleOpenMenu}
+              aria-label="post-options"
+            >
+              <ThreeDotsIcon />
+            </button>
+            {isMenuOpen && (
+              <PostOptionsMenu
+                menuRef={menuRef}
+                handleEditPost={handleEditPost}
+                handleDeletePost={handleDeletePost}
+              />
+            )}
+          </div>
+        )}
       </div>
       <p className="font-normal text-gray-700">{post.content}</p>
     </div>
