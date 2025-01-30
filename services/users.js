@@ -10,6 +10,6 @@ export const loginUserFetch = ({data}) => {
   return RequestService.post(`${PREFIX}/login`, JSON.stringify(data));
 };
 
-export const getUserDataByIdFetch = () => {
-  return RequestService.get(`${PREFIX}/getUserData`);
+export const getUserDataByIdFetch = ({id}) => {
+  return RequestService.get(`${PREFIX}/getUserData/${id}`);
 };

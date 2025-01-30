@@ -47,12 +47,16 @@ export default function ProfileView({ userId }) {
 
   return (
     <div className="w-full h-full flex">
-      <ProfileDataSection handleOpenLogoutModal={handleOpenLogoutModal} />
+      <ProfileDataSection
+        handleOpenLogoutModal={handleOpenLogoutModal}
+        userId={userId}
+      />
       <PostSection
         handleOpenBlogModal={handleOpenBlogModal}
         alertSuccessText={alertSuccessText}
         areNewPosts={areNewPosts}
         setAreNewPosts={setAreNewPosts}
+        userId={userId}
       />
       <LogoutModal
         isOpen={isLogoutModalOpen}

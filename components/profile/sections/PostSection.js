@@ -10,6 +10,7 @@ export default function PostSection({
   alertSuccessText,
   areNewPosts,
   setAreNewPosts,
+  userId
 }) {
   const [searchText, setSearchText] = useState("");
   const [currentPosts, setCurrentPosts] = useState([]);
@@ -19,7 +20,7 @@ export default function PostSection({
     if (!areNewPosts || !setAreNewPosts) return;
     const fetchPostsData = async () => {
       try {
-        const response = await getAllPostsByUserFetch();
+        const response = await getAllPostsByUserFetch({ id: userId });
         const jsonResponse = await response.json();
         const { success, posts } = jsonResponse || {};
         if (success) {
@@ -34,7 +35,7 @@ export default function PostSection({
     };
 
     fetchPostsData();
-  }, [areNewPosts, setAreNewPosts]);
+  }, [areNewPosts, setAreNewPosts, userId]);
 
   const handleSearchTextChange = (event) => {
     setSearchText(event.target.value);

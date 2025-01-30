@@ -2,8 +2,8 @@ import RequestService from "./requestService";
 
 const PREFIX = "posts";
 
-export const getAllPostsByUserFetch = () => {
-  return RequestService.get(`${PREFIX}/getAllPostByUser`);
+export const getAllPostsByUserFetch = ({id}) => {
+  return RequestService.get(`${PREFIX}/getAllPostByUser/${id}`);
 };
 
 export const createPostFetch = ({data}) => {
