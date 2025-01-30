@@ -3,10 +3,20 @@ import { useEffect, useState } from "react";
 import CustomSearchInput from "@/components/shared/CustomSearchInput";
 import PostsList from "@/components/profile/PostsList";
 import CustomPrimaryButton from "@/components/shared/CustomPrimaryButton";
-import { getAllPostsByUserFetch } from "@/services/posts";
+import { getAllPostByUserFilteredFetch } from "@/services/posts";
 import { deletePostFetch } from "@/services/posts";
 import CustomAlertSuccess from "@/components/shared/CustomAlertSuccess";
 import CustomAlertDanger from "@/components/shared/CustomAlertDanger";
+
+const debounce = (fn, delay) => {
+  let timeoutID = null;
+  return function (...args) {
+    clearTimeout(timeoutID);
+    timeoutID = setTimeout(() => {
+      fn(...args);
+    }, delay);
+  };
+};
 
 export default function PostSection({
   handleOpenBlogModal,
@@ -23,29 +33,39 @@ export default function PostSection({
   const [isPostsOwner, setIsPostsOwner] = useState(false);
   const [isLoadingPost, setIsLoadingPost] = useState(true);
 
-  useEffect(() => {
+  const debouncedFetchPostsData = debounce(async (searchText) => {
     if (!areNewPosts || !setAreNewPosts) return;
-    const fetchPostsData = async () => {
-      try {
-        const response = await getAllPostsByUserFetch({ id: userId });
-        const jsonResponse = await response.json();
-        const { success, posts, isOwner } = jsonResponse || {};
-        if (success) {
-          setCurrentPosts(posts);
-          setAreNewPosts(false);
-          setIsPostsOwner(isOwner);
-        }
-        setIsLoadingPost(false);
-      } catch (error) {
-        console.log("Error trying to get the posts data: ", error);
-        setIsLoadingPost(false);
+    try {
+      const response = await getAllPostByUserFilteredFetch({
+        id: userId,
+        searchText,
+      });
+      const jsonResponse = await response.json();
+      const { success, posts, isOwner } = jsonResponse || {};
+      if (success) {
+        setCurrentPosts(posts);
+        setAreNewPosts(false);
+        setIsPostsOwner(isOwner);
       }
-    };
+      setIsLoadingPost(false);
+    } catch (error) {
+      console.log("Error trying to get the posts data: ", error);
+      setIsLoadingPost(false);
+    }
+  }, 500);
 
-    fetchPostsData();
-  }, [areNewPosts, setAreNewPosts, userId]);
+  useEffect(() => {
+    debouncedFetchPostsData(searchText);
+  }, [
+    debouncedFetchPostsData,
+    searchText,
+    areNewPosts,
+    setAreNewPosts,
+    userId,
+  ]);
 
   const handleSearchTextChange = (event) => {
+    setAreNewPosts(true);
     setSearchText(event.target.value);
   };
 
