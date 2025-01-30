@@ -57,7 +57,9 @@ export default function PostSection({
       if (success) {
         setAlertSuccessText("Post deleted successfully!");
         setAreNewPosts(true);
+        return;
       }
+      throw new Error("Something went wrong trying to delete the post");
     } catch (error) {
       console.log("Error trying to delete the post: ", error);
       setAlertErrorText("Something went wrong trying to delete the post");

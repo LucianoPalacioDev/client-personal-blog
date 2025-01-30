@@ -43,9 +43,9 @@ export default function PostItem({ post, isPostsOwner, handleDeletePost }) {
     console.log("Edit post");
   };
 
-  const handleDeletePostAndCloseMenu = () => {
-    handleDeletePost({ id: post?.id });
-    setIsMenuOpen(false);
+  const handleDeletePostAndCloseMenu = async () => {
+    await handleDeletePost({ id: post?.id });
+    handleCloseDeletionPostModal();
   };
 
   return (
