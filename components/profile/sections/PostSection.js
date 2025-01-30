@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import CustomSearchInput from "@/components/shared/CustomSearchInput";
 import PostsList from "@/components/profile/PostsList";
 import CustomPrimaryButton from "@/components/shared/CustomPrimaryButton";
-import { getAllPostsFetch } from "@/services/posts";
+import { getAllPostsByUserFetch } from "@/services/posts";
 
 export default function PostSection({
   handleOpenBlogModal,
@@ -19,7 +19,7 @@ export default function PostSection({
     if (!areNewPosts || !setAreNewPosts) return;
     const fetchPostsData = async () => {
       try {
-        const response = await getAllPostsFetch();
+        const response = await getAllPostsByUserFetch();
         const jsonResponse = await response.json();
         const { success, posts } = jsonResponse || {};
         if (success) {
