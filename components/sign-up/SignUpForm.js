@@ -11,6 +11,7 @@ import { registerUserFetch } from "@/services/users";
 import { useCookies } from "next-client-cookies";
 import { useRouter } from "next/navigation";
 import LoadingIcon from "@/components/shared/icons/LoadingIcon";
+import {setToken} from '@/services/requestService';
 
 export default function SignUpForm() {
   const [usernameText, setUsernameText] = useState("");
@@ -78,6 +79,7 @@ export default function SignUpForm() {
         setErrorMessage(message);
       } else {
         cookies.set("token", token, { expires: 30 });
+        setToken(token);
         router.push(`/profile/${userId}`);
       }
       setIsFetching(false);

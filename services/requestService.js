@@ -1,7 +1,11 @@
 import Cookies from "js-cookie";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const token = Cookies.get("token") || "";
+let token = Cookies.get("token") || "";
+
+export const setToken = (newToken) => {
+  token = newToken;
+};
 
 const getToken = () => token;
 
