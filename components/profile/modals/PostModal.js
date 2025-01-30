@@ -7,16 +7,26 @@ import CustomTextInput from "@/components/shared/CustomTextInput";
 import CustomTextAreaInput from "@/components/shared/CustomTextAreaInput";
 import { createPostFetch } from "@/services/posts";
 
-export default function BlogModal({
+export default function PostModal({
   isOpen,
   onClose,
   isBlogEditing,
+  setAlertSuccessText,
+  setAreNewPosts,
 }) {
   const [titleText, setTitleText] = useState("");
   const [titleErrorText, setTitleErrorText] = useState("");
   const [contentText, setContentText] = useState("");
   const [contentErrorText, setContentErrorText] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
+  const resetValues = () => {
+    setTitleText("");
+    setTitleErrorText("");
+    setContentText("");
+    setContentErrorText("");
+    setErrorMessage("");
+  };
 
   const handleTitleTextChange = (e) => {
     setTitleText(e.target.value);
@@ -53,21 +63,33 @@ export default function BlogModal({
       if (!success) {
         setErrorMessage(message);
       } else {
-        console.log("Post creado!")
+        setAreNewPosts(true);
+        setAlertSuccessText(
+          `Post ${isBlogEditing ? "edited" : "created"} successfully!`
+        );
+        resetValues();
+        onClose();
       }
     } catch (error) {
-      console.log(`Error trying to ${isBlogEditing ? "edit" : "create"} the post.`, error);
+      console.log(
+        `Error trying to ${isBlogEditing ? "edit" : "create"} the post.`,
+        error
+      );
       setErrorMessage(
         `Error trying to ${
           isBlogEditing ? "edit" : "create"
         } the post. Please, try again!`
       );
     }
+  };
 
+  const handleCloseModal = () => {
+    resetValues();
+    onClose();
   };
 
   return (
-    <CustomModal isOpen={isOpen} onClose={onClose}>
+    <CustomModal isOpen={isOpen} onClose={handleCloseModal}>
       <div className="w-full h-full p-5 flex flex-col justify-between items-center gap-5">
         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
           {`${isBlogEditing ? "Edit" : "Create New"} Post`}
@@ -101,7 +123,7 @@ export default function BlogModal({
               <CustomSecondaryButton
                 text="Close"
                 type="button"
-                handleClick={onClose}
+                handleClick={handleCloseModal}
               />
               <CustomPrimaryButton
                 text={isBlogEditing ? "Edit" : "Create"}

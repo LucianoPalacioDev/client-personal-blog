@@ -5,11 +5,17 @@ import PostsList from "@/components/profile/PostsList";
 import CustomPrimaryButton from "@/components/shared/CustomPrimaryButton";
 import { getAllPostsFetch } from "@/services/posts";
 
-export default function PostSection({ handleOpenBlogModal }) {
+export default function PostSection({
+  handleOpenBlogModal,
+  alertSuccessText,
+  areNewPosts,
+  setAreNewPosts,
+}) {
   const [searchText, setSearchText] = useState("");
   const [currentPosts, setCurrentPosts] = useState([]);
 
   useEffect(() => {
+    if (!areNewPosts || !setAreNewPosts) return;
     const fetchPostsData = async () => {
       try {
         const response = await getAllPostsFetch();
@@ -17,6 +23,7 @@ export default function PostSection({ handleOpenBlogModal }) {
         const { success, posts } = jsonResponse || {};
         if (success) {
           setCurrentPosts(posts);
+          setAreNewPosts(false);
         }
       } catch (error) {
         console.log("Error trying to get the posts data: ", error);
@@ -24,7 +31,7 @@ export default function PostSection({ handleOpenBlogModal }) {
     };
 
     fetchPostsData();
-  }, []);
+  }, [areNewPosts, setAreNewPosts]);
 
   const handleSearchTextChange = (event) => {
     setSearchText(event.target.value);
@@ -49,6 +56,11 @@ export default function PostSection({ handleOpenBlogModal }) {
             />
           </div>
         </div>
+        {!!alertSuccessText && (
+          <div className="p-4 text-sm text-green-800 rounded-lg bg-green-50 flex justify-center">
+            <span className="font-medium">{alertSuccessText}</span>
+          </div>
+        )}
         <PostsList posts={currentPosts} />
       </div>
     </div>

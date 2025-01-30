@@ -1,18 +1,28 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCookies } from "next-client-cookies";
 import { useRouter } from "next/navigation";
 import LogoutModal from "@/components/profile/modals/LogoutModal";
-import BlogModal from "@/components/profile/modals/PostModal";
+import PostModal from "@/components/profile/modals/PostModal";
 import ProfileDataSection from "@/components/profile/sections/ProfileDataSection";
 import PostSection from "@/components/profile/sections/PostSection";
 
 export default function ProfileView({ userId }) {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isBlogModalOpen, setIsBlogModalOpen] = useState(false);
+  const [alertSuccessText, setAlertSuccessText] = useState(false);
+  const [areNewPosts, setAreNewPosts] = useState(true);
 
   const cookies = useCookies();
   const router = useRouter();
+
+  useEffect(() => {
+    if (alertSuccessText) {
+      setTimeout(() => {
+        setAlertSuccessText('');
+      }, 2000);
+    }
+  }, [alertSuccessText]);
 
   const handleLogout = () => {
     cookies.set("token", "", { expires: new Date(0) });
@@ -37,19 +47,24 @@ export default function ProfileView({ userId }) {
 
   return (
     <div className="w-full h-full flex">
-      <ProfileDataSection
-        handleOpenLogoutModal={handleOpenLogoutModal}
+      <ProfileDataSection handleOpenLogoutModal={handleOpenLogoutModal} />
+      <PostSection
+        handleOpenBlogModal={handleOpenBlogModal}
+        alertSuccessText={alertSuccessText}
+        areNewPosts={areNewPosts}
+        setAreNewPosts={setAreNewPosts}
       />
-      <PostSection handleOpenBlogModal={handleOpenBlogModal} />
       <LogoutModal
         isOpen={isLogoutModalOpen}
         onClose={handleCloseLogoutModal}
         handleLogout={handleLogout}
       />
-      <BlogModal
+      <PostModal
         isOpen={isBlogModalOpen}
         onClose={handleCloseBlogModal}
         isBlogEditing={false}
+        setAlertSuccessText={setAlertSuccessText}
+        setAreNewPosts={setAreNewPosts}
       />
     </div>
   );
