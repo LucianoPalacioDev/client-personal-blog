@@ -10,7 +10,8 @@ import PostSection from "@/components/profile/sections/PostSection";
 export default function ProfileView({ userId }) {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isBlogModalOpen, setIsBlogModalOpen] = useState(false);
-  const [alertSuccessText, setAlertSuccessText] = useState(false);
+  const [alertSuccessText, setAlertSuccessText] = useState('');
+  const [alertErrorText, setAlertErrorText] = useState('');
   const [areNewPosts, setAreNewPosts] = useState(true);
 
   const cookies = useCookies();
@@ -23,6 +24,14 @@ export default function ProfileView({ userId }) {
       }, 2000);
     }
   }, [alertSuccessText]);
+
+  useEffect(() => {
+    if (alertErrorText) {
+      setTimeout(() => {
+        setAlertErrorText('');
+      }, 2000);
+    }
+  }, [alertErrorText]);
 
   const handleLogout = () => {
     cookies.set("token", "", { expires: new Date(0) });
@@ -53,7 +62,10 @@ export default function ProfileView({ userId }) {
       />
       <PostSection
         handleOpenBlogModal={handleOpenBlogModal}
+        setAlertSuccessText={setAlertSuccessText}
         alertSuccessText={alertSuccessText}
+        alertErrorText={alertErrorText}
+        setAlertErrorText={setAlertErrorText}
         areNewPosts={areNewPosts}
         setAreNewPosts={setAreNewPosts}
         userId={userId}

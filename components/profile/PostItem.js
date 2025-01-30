@@ -2,9 +2,12 @@
 import { useEffect, useRef, useState } from "react";
 import ThreeDotsIcon from "@/components/shared/icons/ThreeDotsIcon";
 import PostOptionsMenu from "@/components/profile/menus/PostOptionsMenu";
+import PostDeletionModal from '@/components/profile/modals/PostDeletionModal';
 
-export default function PostItem({ post, isPostsOwner }) {
+export default function PostItem({ post, isPostsOwner, handleDeletePost }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDeletionPostModalOpen, setIsDeletionPostModalOpen] = useState(false);
+
   const menuRef = useRef();
 
   const handleOpenMenu = () => {
@@ -13,6 +16,14 @@ export default function PostItem({ post, isPostsOwner }) {
 
   const handleCloseMenu = () => {
     setIsMenuOpen(false);
+  };
+
+  const handleOpenDeletionPostModal = () => {
+    setIsDeletionPostModalOpen(true);
+  };
+
+  const handleCloseDeletionPostModal = () => {
+    setIsDeletionPostModalOpen(false);
   };
 
   const handleClickMenuOutside = (event) => {
@@ -32,8 +43,9 @@ export default function PostItem({ post, isPostsOwner }) {
     console.log("Edit post");
   };
 
-  const handleDeletePost = () => {
-    console.log("Delete post");
+  const handleDeletePostAndCloseMenu = () => {
+    handleDeletePost({ id: post?.id });
+    setIsMenuOpen(false);
   };
 
   return (
@@ -54,13 +66,18 @@ export default function PostItem({ post, isPostsOwner }) {
               <PostOptionsMenu
                 menuRef={menuRef}
                 handleEditPost={handleEditPost}
-                handleDeletePost={handleDeletePost}
+                handleDeletePost={handleOpenDeletionPostModal}
               />
             )}
           </div>
         )}
       </div>
       <p className="font-normal text-gray-700">{post.content}</p>
+      <PostDeletionModal 
+        isOpen={isDeletionPostModalOpen}
+        onClose={handleCloseDeletionPostModal}
+        handleDeletePostAndCloseMenu={handleDeletePostAndCloseMenu}
+      />
     </div>
   );
 }

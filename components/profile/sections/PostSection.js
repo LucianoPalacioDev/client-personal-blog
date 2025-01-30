@@ -4,10 +4,16 @@ import CustomSearchInput from "@/components/shared/CustomSearchInput";
 import PostsList from "@/components/profile/PostsList";
 import CustomPrimaryButton from "@/components/shared/CustomPrimaryButton";
 import { getAllPostsByUserFetch } from "@/services/posts";
+import { deletePostFetch } from "@/services/posts";
+import CustomAlertSuccess from "@/components/shared/CustomAlertSuccess";
+import CustomAlertDanger from "@/components/shared/CustomAlertDanger";
 
 export default function PostSection({
   handleOpenBlogModal,
+  setAlertSuccessText,
   alertSuccessText,
+  alertErrorText,
+  setAlertErrorText,
   areNewPosts,
   setAreNewPosts,
   userId,
@@ -43,6 +49,21 @@ export default function PostSection({
     setSearchText(event.target.value);
   };
 
+  const handleDeletePost = async ({ id }) => {
+    try {
+      const response = await deletePostFetch({ id });
+      const jsonResponse = await response.json();
+      const { success } = jsonResponse || {};
+      if (success) {
+        setAlertSuccessText("Post deleted successfully!");
+        setAreNewPosts(true);
+      }
+    } catch (error) {
+      console.log("Error trying to delete the post: ", error);
+      setAlertErrorText("Something went wrong trying to delete the post");
+    }
+  };
+
   return (
     <div className="w-2/3 h-full flex flex-col justify-center items-center">
       <div className="w-10/12 h-full pt-20 flex flex-col gap-10">
@@ -64,15 +85,14 @@ export default function PostSection({
             </div>
           )}
         </div>
-        {!!alertSuccessText && (
-          <div className="p-4 text-sm text-green-800 rounded-lg bg-green-50 flex justify-center">
-            <span className="font-medium">{alertSuccessText}</span>
-          </div>
-        )}
+        {!!alertSuccessText && <CustomAlertSuccess text={alertSuccessText} />}
+        {!!alertErrorText && <CustomAlertDanger text={alertErrorText} />}
         <PostsList
           posts={currentPosts}
           isLoadingPost={isLoadingPost}
           isPostsOwner={isPostsOwner}
+          setAlertSuccessText={setAlertSuccessText}
+          handleDeletePost={handleDeletePost}
         />
       </div>
     </div>
