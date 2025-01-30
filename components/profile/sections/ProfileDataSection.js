@@ -21,7 +21,6 @@ export default function ProfileDataSection({ userId }) {
       try {
         const response = await getUserDataByIdFetch({ id: userId });
         const jsonResponse = await response.json();
-        console.log("jsonResponse: ", jsonResponse)
         const { success, user, isOwner } = jsonResponse || {};
         if (success) {
           const { username, email } = user || {};
