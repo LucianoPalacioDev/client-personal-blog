@@ -91,7 +91,7 @@ export default function SignUpForm() {
   };
 
   return (
-    <div className="flex flex-col justify-center w-1/2 gap-3">
+    <div className="flex flex-col justify-center w-5/6 sm:w-1/2 gap-3">
       <form onSubmit={handleSignUp}>
         <div className="flex flex-col gap-5">
           <CustomTextInput

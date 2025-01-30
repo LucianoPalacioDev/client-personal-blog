@@ -66,7 +66,7 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="flex flex-col justify-center w-1/2 gap-3">
+    <div className="flex flex-col justify-center w-5/6 sm:w-1/2 gap-3">
       <form onSubmit={handleLogin}>
         <div className="flex flex-col gap-5">
           <CustomEmailInput
