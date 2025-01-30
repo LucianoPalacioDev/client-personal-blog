@@ -5,8 +5,8 @@ import CustomDangerButton from "@/components/shared/CustomDangerButton";
 import { getUserDataByIdFetch } from "@/services/users";
 
 export default function ProfileDataSection({ handleOpenLogoutModal }) {
-  const [profileUsername, setProfileUsername] = useState("");
-  const [profileEmail, setProfileEmail] = useState("");
+  const [profileUsername, setProfileUsername] = useState("Loading...");
+  const [profileEmail, setProfileEmail] = useState("Loading...");
 
   useEffect(() => {
     const fetchUserData = async () => {

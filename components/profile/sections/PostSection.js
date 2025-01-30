@@ -13,6 +13,7 @@ export default function PostSection({
 }) {
   const [searchText, setSearchText] = useState("");
   const [currentPosts, setCurrentPosts] = useState([]);
+  const [isLoadingPost, setIsLoadingPost] = useState(true);
 
   useEffect(() => {
     if (!areNewPosts || !setAreNewPosts) return;
@@ -25,8 +26,10 @@ export default function PostSection({
           setCurrentPosts(posts);
           setAreNewPosts(false);
         }
+        setIsLoadingPost(false);
       } catch (error) {
         console.log("Error trying to get the posts data: ", error);
+        setIsLoadingPost(false);
       }
     };
 
@@ -61,7 +64,7 @@ export default function PostSection({
             <span className="font-medium">{alertSuccessText}</span>
           </div>
         )}
-        <PostsList posts={currentPosts} />
+        <PostsList posts={currentPosts} isLoadingPost={isLoadingPost}/>
       </div>
     </div>
   );
